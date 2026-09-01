@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Colorize black-and-white photos automatically using the DeOldify AI model.">
+    <title>AI Colorize – B&W to Color</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9zzTmzR+MW23Xz1p2yYNWD41uPzQVwc85g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <!-- ==================== Theme Toggle ==================== -->
+    <div class="theme-toggle">
+        <button id="themeToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- ==================== Header ==================== -->
+        <header>
+            <h1><i class="fas fa-palette"></i> AI Colorize</h1>
+            <p class="subtitle">Transform black-and-white photos with DeOldify</p>
+            <p class="subtitle small">Upload one or multiple images – we'll colorize them one by one.</p>
+        </header>
+
+        <!-- ==================== Upload Section ==================== -->
+        <div class="upload-section">
+            <div class="upload-area" id="dropArea">
+                <i class="fas fa-cloud-upload-alt icon"></i>
+                <p>Drag & drop images here</p>
+                <p class="small">or click to browse</p>
+                <input type="file" id="fileInput" accept="image/*" multiple aria-label="Choose images to colorize">
+            </div>
+
+            <div class="settings-panel">
+                <div class="setting">
+                    <label for="renderFactor">Color intensity (render factor): <span id="factorDisplay">35</span></label>
+                    <input type="range" id="renderFactor" min="10" max="50" value="35" step="1"
+                           aria-valuemin="10" aria-valuemax="50" aria-valuenow="35">
+                    <span class="hint">Higher values = more vivid colors, may introduce artifacts.</span>
+                </div>
+                <div class="setting">
+                    <label>
+                        <input type="checkbox" id="autoStart" checked> Auto-start processing after upload
+                    </label>
+                </div>
+            </div>
+
+            <button id="processBtn" disabled>
+                <i class="fas fa-play"></i> Colorize Now
+            </button>
+            <div id="globalProgress" class="progress-bar" style="display:none;">
+                <div class="progress-fill" style="width:0%"></div>
+                <span class="progress-text">0%</span>
+            </div>
+            <div id="errorMsg" class="error" role="alert"></div>
+        </div>
+
+        <!-- ==================== File List ==================== -->
+        <div id="fileList" class="file-list">
+            <div class="file-item empty">No files selected</div>
+        </div>
+
+        <!-- ==================== Results Gallery ==================== -->
+        <div id="resultsGallery" class="results-gallery"></div>
+
+        <!-- ==================== Batch Actions ==================== -->
+        <div id="batchActions" style="display:none; margin-top:20px; text-align:center;">
+            <button id="downloadAllBtn" class="btn secondary">
+                <i class="fas fa-download"></i> Download All as ZIP
+            </button>
+            <button id="clearAllBtn" class="btn danger">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+        </div>
+
+        <!-- ==================== Footer ==================== -->
+        <footer>
+            <p>Powered by <a href="https://github.com/jantic/DeOldify" target="_blank" rel="noopener noreferrer">DeOldify</a>
+               &bull; Images are temporarily stored and auto-deleted after processing.</p>
+        </footer>
+    </div>
+
+<!-- ==================== Scripts ==================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+            integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"
+            integrity="sha512-Qlv6VSKh1gDKGoJbnyA5RMXYcvnpIqhO++MhIM2fStMcGT9i2T//tSwYFlcyoRRDcDZ+TYHpH8azBBCyhpSeqw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
